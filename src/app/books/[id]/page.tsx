@@ -1,4 +1,5 @@
 import ReadBtn from "@/components/bookDetails/ReadBtn";
+import WishBtn from "@/components/bookDetails/WishBtn";
 import { IBook } from "@/types/books.type";
 import Image from "next/image";
 import React from "react";
@@ -94,12 +95,7 @@ const BookDetailsPage = async ({ params }: IBookDetailsPageProps) => {
         {/* Actions */}
         <div className="mt-8 flex flex-wrap gap-4">
           <ReadBtn book={book}/>
-          <button
-            type="button"
-            className="rounded-lg bg-[#59A5C6] px-6 py-4 text-lg font-semibold text-white transition hover:bg-[#4a93b3] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#59A5C6] cursor-pointer"
-          >
-            Wishlist
-          </button>
+          <WishBtn book={book}/>
         </div>
       </div>
     </section>

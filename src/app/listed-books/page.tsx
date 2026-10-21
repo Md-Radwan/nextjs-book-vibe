@@ -4,16 +4,55 @@ import ReadBooksCard from "@/components/shared/ReadBooksCard";
 import WishlistBooksCard from "@/components/shared/WishlistBooksCard";
 import { BooksContext } from "@/context/BooksContext";
 import { IBook } from "@/types/books.type";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 
 const ListedBookPage = () => {
-  const { readBooks, wishlist } = useContext(BooksContext);
-  console.log("readbooks", "wishlist", readBooks, wishlist);
+  const { readBooks, wishlist } = useContext(BooksContext)as {
+    readBooks: IBook[];
+    wishlist: IBook[];
+  };
+  const [sortBy, setSortBy] = useState<"rating" | "pages" | "year">("rating");
+  // console.log("readbooks", "wishlist", readBooks, wishlist);
+
+  const sortBooks = (books: IBook[]) => {
+    const sortedBooks = [...books];
+
+    if (sortBy === "rating") {
+      sortedBooks.sort((a, b) => b.rating - a.rating)
+    }else if(sortBy === "pages"){
+      sortedBooks.sort((a, b) => b.totalPages - a.totalPages)
+    }else if (sortBy === "year") {
+      sortedBooks.sort((a, b) => b.yearOfPublishing - a.yearOfPublishing)
+    }
+    
+    return sortedBooks
+  }
+
+  const sortedReadBooks = sortBooks(readBooks);
+  const sortedWishlist = sortBooks(wishlist)
+
   return (
     <div className="container mx-auto mt-9">
       {/* heading */}
       <div className="rounded-[16px] bg-[#F3F3F3] py-8.5">
         <h1 className="font-bold text-[28px] text-center">Books</h1>
+      </div>
+
+      <div className="text-center mt-8 flex items-center justify-center gap-2">
+        Sort by:{" "}
+        <select
+          // defaultValue="Sort By"
+          className="select select-success cursor-pointer w-[200px]"
+          value={sortBy}
+          onChange={(e) =>
+            setSortBy(e.target.value as "rating" | "pages" | "year")
+          }
+        >
+          {/* <option disabled={true}>Sort By</option> */}
+          <option value={"rating"}>Rating</option>
+          <option value={"pages"}>Number of pages</option>
+          <option value={"year"}>Published year</option>
+        </select>
       </div>
       {/* tabs */}
       {/* name of each tab group should be unique */}
@@ -26,9 +65,9 @@ const ListedBookPage = () => {
           defaultChecked
         />
         <div className="tab-content bg-base-100 border-base-300 p-6">
-          {readBooks.length > 0 ? (
-            readBooks.map((book: IBook) => {
-              return <ReadBooksCard key={book.bookId} book={book}/>;
+          {sortedReadBooks.length > 0 ? (
+            sortedReadBooks.map((book: IBook, index: number) => {
+              return <ReadBooksCard key={index} book={book} />;
             })
           ) : (
             <p className="text-center text-lg font-semibold">
@@ -44,9 +83,9 @@ const ListedBookPage = () => {
           aria-label="Wishlist Books"
         />
         <div className="tab-content bg-base-100 border-base-300 p-6">
-          {wishlist.length > 0 ? (
-            wishlist.map((book: IBook) => {
-              return <WishlistBooksCard key={book.bookId} book={book}/>;
+          {sortedWishlist.length > 0 ? (
+            sortedWishlist.map((book: IBook, index: number) => {
+              return <WishlistBooksCard key={index} book={book} />;
             })
           ) : (
             <p className="text-center text-lg font-semibold">

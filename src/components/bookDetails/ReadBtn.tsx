@@ -7,7 +7,10 @@ import { toast } from "react-toastify";
 
 const ReadBtn = ({book}: {book: IBook}) => {
 
-    const {readBooks, setReadBooks} = useContext(BooksContext);
+    const {readBooks, setReadBooks} = useContext(BooksContext) as {
+        readBooks: IBook[];
+        setReadBooks: React.Dispatch<React.SetStateAction<IBook[]>>;
+    };
 
     const handleReadBtn = () => {
         

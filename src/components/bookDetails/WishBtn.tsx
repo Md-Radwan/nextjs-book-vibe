@@ -6,7 +6,10 @@ import React, { useContext } from "react";
 import { toast } from "react-toastify";
 
 const WishBtn = ({ book }: { book: IBook }) => {
-  const { wishlist, setWishlist } = useContext(BooksContext);
+  const { wishlist, setWishlist } = useContext(BooksContext) as {
+    wishlist: IBook[];
+    setWishlist: React.Dispatch<React.SetStateAction<IBook[]>>;
+  };
 
   const handleWishBtn = () => {
     console.log("wish list button is triggered", book);
